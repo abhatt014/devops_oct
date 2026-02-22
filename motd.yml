@@ -1,0 +1,8 @@
+---
+- name: set MOTD on servers
+  hosts: all
+  tasks:
+    - name: use copy mod
+      copy:
+        content: "Welcome to Ansible"
+        dest: /etc/motd
