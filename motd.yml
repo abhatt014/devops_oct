@@ -4,5 +4,6 @@
   tasks:
     - name: use copy mod
       copy:
-        content: "Welcome to Ansible"
+        content: "{{motd_msg}}"
         dest: /etc/motd
+
