@@ -1,0 +1,8 @@
+# convert ad-hoc ansible all -m ping to playbook
+---
+- name: ping all server
+  hosts: all
+  tasks:
+    - name: use ping mod
+      ping:
+
