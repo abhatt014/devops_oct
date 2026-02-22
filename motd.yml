@@ -1,9 +1,11 @@
 ---
 - name: set MOTD on servers
   hosts: all
+  become: true
   tasks:
     - name: use copy mod
       copy:
         content: "{{motd_msg}}"
         dest: /etc/motd
+
 
