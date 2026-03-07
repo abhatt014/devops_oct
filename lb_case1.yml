@@ -1,0 +1,46 @@
+---
+- name: remove httpd from balancers host groups servers
+  hosts: balancers
+  tasks:
+    - name: remove httpd
+      package:
+        name: httpd
+        state: absent
+- name: deploy webapp
+  hosts: webservers
+  tasks:
+    - name: install httpd
+      package:
+        name: httpd
+        state: present
+    - name: start and enable httpd
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+    - name: create index.html on all nodes
+      template:
+        src: index.html.j2
+        dest: /var/www/html/index.html
+    - name: enable http in firewall
+      firewalld: 
+        name: http
+        state: enabled
+        immediate: yes
+        permanent: yes
+    - name: restart webserver
+      service:
+        name: httpd
+        state: restarted
+- name: deploy haproxy role
+  hosts: balancers
+  vars:
+    haproxy_backend_servers:
+      - name: node1
+        address: 192.168.0.125:80
+      - name: node2
+        address: 192.168.0.118:80
+      - name: node3
+        address: 192.168.0.163:80
+  roles:
+    - geerlingguy.haproxy
